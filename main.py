@@ -1,62 +1,77 @@
+from bs4 import BeautifulSoup
 from pymongo import MongoClient
-import re
 from selenium import webdriver
+import re
 
-# Validando input do usuario (ano da copa que ele deseja consultar)
+
+COPA_ANO_INICIO = 2001
+COPA_ANO_FIM = 2015
+
+
+# -------------------------------------------------------------------------------------
 while True:
-    ano_copa = input('Digite o ano da copa que deseja buscar. (2001-2015): ')
-    
-    if ano_copa.isdigit():
-        ano_copa = int(ano_copa)
+    ano_copa = input(f'Digite o ano da copa que deseja buscar. ({COPA_ANO_INICIO}-{COPA_ANO_FIM}): ')
 
-        if 2001 <= ano_copa <= 2015:
-            break
+    if not ano_copa.isdigit():
+        continue
 
-url_conexao_mongodb = input('Digite a url de conexão do MongoDB: ')
+    if COPA_ANO_INICIO <= int(ano_copa) <= COPA_ANO_FIM:
+        break
 
-# Abrindo browser e site
+# -------------------------------------------------------------------------------------
+while True:
+    conectar_db = input('Deseja armazenar dados automaticamente no MongoDB? (s/n): ').lower()
+
+    if conectar_db == 's' or conectar_db == 'n':
+        break
+
+if conectar_db == 's':
+    url_conexao_mongodb = input('Digite a url de conexão do MongoDB: ')
+
+# -------------------------------------------------------------------------------------
 url_site = f'https://www.branqs.com.br/copaBranqs/copaBranqs{ano_copa}/copabranqs{ano_copa}.html'
-browser = webdriver.Chrome()
-browser.get(url_site)
+navegador = webdriver.Chrome()
+navegador.get(url_site)
 
-# Pegando elementos HTML
-elementos = browser.find_elements('xpath', '//p[font[@size="5"]]|//i[font[@size="5"]]')
+html = navegador.page_source
+soup = BeautifulSoup(html, 'html.parser')
+
+partidas = []
+
+elementos = soup.find_all('p') # Pegando partidas com essa formatação HTML
 padrao = re.compile(r'([^\W_]+(?:[\s-][^\W_]+)*)\s*(\d+)\s*x\s*(\d+)\s*([^\W_]+(?:[\s-][^\W_]+)*)')
 
-dados_partidas = []
-
-# Iterando elementos webDriver encontrados
 for elemento in elementos:
-    informacoes_partida = elemento.text
-    resultados = padrao.findall(informacoes_partida)
-    
-    # Iterando .text HTML dos elementos
-    for resultado in resultados:
-        time1, gols1, gols2, time2 = resultado
-        # Criando objeto com os resultados
-        dados_partida = {
-            'nomeTimeA': time1.strip(),
-            'pontosTimeA': gols1,
-            'nomeTimeB': time2.strip(),
-            'pontosTimeB': gols2
-        }
-        # Colocando no array de objetos
-        dados_partidas.append(dados_partida)
+    texto = elemento.text
+    partida = padrao.search(texto)
 
-# Fechando navegador
-browser.quit()
+    if not partida:
+        continue
 
-# Mostrar dados encontrados no console
-for i, dados in enumerate(dados_partidas):
-    print(dados['nomeTimeA'], dados['pontosTimeA'], dados['nomeTimeB'], dados['pontosTimeB'])
-print(f'{i+1} Jogos encontrados.')
+    partidas.append({
+        'nomeTimeA':    partida.group(1),
+        'pontosTimeA':  partida.group(2),
+        'pontosTimeB':  partida.group(3),
+        'nomeTimeB':    partida.group(4)
+    })
 
-# Tentando conectar com o MongoDB
+if not partidas:
+    print('Não foi possivel encontrar uma partida.')
+    quit()
+
+for i, partida in enumerate(partidas):
+    print(f"{partida['nomeTimeA']} {partida['pontosTimeA']} x {partida['pontosTimeB']} {partida['nomeTimeB']}")
+print(f'{i+1} partidas encontradas.')
+
+# -------------------------------------------------------------------------------------
+if conectar_db == 'n':
+    quit()
+
 try:
     client = MongoClient(url_conexao_mongodb)
     db = client['copaBranqs']
-    collection = db[str(ano_copa)]
-    collection.insert_many(dados_partidas)
+    collection = db[ano_copa]
+    collection.insert_many(partidas)
 
     print("Dados inseridos com sucesso!")
 
