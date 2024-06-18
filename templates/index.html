@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper - CopaBranqs</title>
+</head>
+<body>
+    <h1>Buscar partidas da <a href="https://www.branqs.com.br/copaBranqs/copaBranqs.html">CopaBranqs<a></h1>
+
+    <form method="POST">
+        <label for="ano_copa">Digite o ano da copa das partidas que deseja buscar</label><br>
+        <input type="text" id="ano_copa" name="ano_copa" maxlength="4"><br>
+        <button type="submit">Buscar</button>
+    </form>
+
+    {% if partidas %}
+        <h2>Partidas Encontradas:</h2>
+            <ul>
+                {% for partida in partidas %}
+                    <li>{{ partida.nomeTimeA }} {{ partida.pontosTimeA }} x {{ partida.pontosTimeB }} {{ partida.nomeTimeB }}</li>
+                {% endfor %}
+            </ul>
+        <p>{{ partidas|length }} partidas encontradas.</p>
+    {% endif %}
+</body>
+</html>
