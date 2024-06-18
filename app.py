@@ -32,6 +32,8 @@ def index():
         
         return render_template('index.html', partidas=partidas)
 
+    return render_template('index.html')
+
 
 def validar_ano_copa(_ano_copa):
     try:
@@ -40,7 +42,7 @@ def validar_ano_copa(_ano_copa):
     except ValueError:
         return False
 
-    if not (COPA_ANO_INICIO <= _ano_copa >= COPA_ANO_FIM):
+    if not (COPA_ANO_INICIO <= _ano_copa <= COPA_ANO_FIM):
         return False
     
     return True
