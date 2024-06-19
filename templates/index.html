@@ -18,10 +18,16 @@
         <h2>Partidas Encontradas:</h2>
             <ul>
                 {% for partida in partidas %}
-                    <li>{{ partida.nomeTimeA }} {{ partida.pontosTimeA }} x {{ partida.pontosTimeB }} {{ partida.nomeTimeB }}</li>
+                    <li>
+                        <button onclick="editarPartida(this)">Editar</button>
+                        <button onclick="removerPartida(this)">Remover</button>
+                        <span>{{ partida.nomeTimeA }} {{ partida.pontosTimeA }} x {{ partida.pontosTimeB }} {{ partida.nomeTimeB }}</span>
+                    </li>
                 {% endfor %}
             </ul>
         <p>{{ partidas|length }} partidas encontradas.</p>
     {% endif %}
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
