@@ -1,0 +1,74 @@
+* {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    margin-left: 0.4rem;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+label, input {
+    font-size: 1.2rem;
+    display: block;
+}
+
+label {
+    margin-bottom: 0.2rem;
+}
+
+input {
+    border: 0.15rem solid gray;
+    border-radius: 4px;
+    padding: 0.15rem;
+    margin-bottom: 0.8rem;
+}
+
+button {
+    margin-bottom: 0.2rem;
+}
+
+.btn-buscar {
+    font-size: 1.2rem;
+    border-style: none;
+    border-radius: 4px;
+    width: 5rem;
+    height: 2rem;
+    background-color: dodgerblue;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+}
+
+.btn-buscar:hover {
+    background-color: #3098ff;
+}
+
+.btn-buscar:active {
+    background-color: #1387fa;
+}
+
+.img-editar {
+    margin: 0px 1px 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+
+.img-remover {
+    margin: 0px 1px 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+
+.btn-editar {
+    background-color:gold;
+}
+
+.btn-remover {
+    background-color: red;
+}
+
+h2 {
+    margin-bottom: 0.6rem;
+}
