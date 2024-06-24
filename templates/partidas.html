@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    {% if partidas %}
+
+        <h2>Partidas Encontradas:</h2>
+
+        <ul>
+
+            {% set index = 0 %}
+
+            {% for partida in partidas %}
+
+                <li>
+
+                    <form action="/partidas" method="POST">
+
+                        <input type="hidden" name="index" value="{{ index }}">
+
+                        <button class="btn-editar" onclick="editarPartida(this)">
+                            <img src="./static/img_editar.png" alt="editar partida" class="img-editar"> 
+                        </button>
+
+                        <button type="submit" class="btn-remover">
+                             <img src="./static/img_remover.png" alt="remover partida" class="img-remover">
+                        </button>
+
+                        <span>{{ partida.nomeTimeA }} {{ partida.pontosTimeA }} x {{ partida.pontosTimeB }} {{ partida.nomeTimeB }}</span>
+
+                    </form>
+
+                </li>
+
+            {% set index = index + 1 %}
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <h2>Nenhuma partida encontrada.</h2>
+
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='editar.js') }}"></script>
+
+{% endblock %}

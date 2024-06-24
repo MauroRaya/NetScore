@@ -1,5 +1,5 @@
-from flask import Flask, request, render_template, redirect, url_for
-from scraper import buscar_partidas
+from flask import Flask, request, render_template
+from raspagem import buscar_partidas
 
 
 app = Flask(__name__)
@@ -28,35 +28,58 @@ def validar_ano(_ano_copa):
 
 @app.route('/')
 def index():
-    return render_template('index.html', partidas=partidas)
+    return render_template('index.html')
 
 
-@app.route('/', methods=['POST'])
-def scrape():
+@app.route('/partidas', methods=['POST'])
+def raspar():
     global partidas
     ano_copa = request.form.get("ano_copa", None)
     
-    if validar_ano(ano_copa):
-        partidas = buscar_partidas(ano_copa)
+    if not validar_ano(ano_copa):
+        return render_template('erro.html', mensagem='Número do ano da copa invalido.')
         
-    return render_template('index.html', partidas=partidas)
+    partidas = buscar_partidas(ano_copa)
+
+    return render_template('partidas.html', partidas=partidas)
 
 
-@app.route('/', methods=['PATCH'])
+@app.route('/partidas', methods=['PATCH', 'GET'])
 def editar_partidas():
     global partidas
-    index_partida = int(request.args.get('index', None))
-    novo_texto    = request.args.get('texto', None)
-    partidas[index_partida] = novo_texto
-    return render_template('index.html', partidas=partidas)
+
+    if request.method == 'PATCH':
+        index_partida = int(request.args.get('index', None))
+        novo_texto    = request.args.get('texto', None)
+
+        if not index_partida:
+            return render_template('erro.html', mensagem='Não foi possivel editar partida.')
+        
+        if not novo_texto:
+            return render_template('erro.html', mensagem='Texto da nova partida invalido.')
+        
+        partidas[index_partida] = novo_texto
+
+        return render_template('partidas.html', partidas=partidas)
+    
+    return render_template('erro.html', mensagem='Método HTTP invalido.')
 
 
-@app.route('/', methods=['DELETE'])
-def deletar_partidas():
+@app.route('/partidas', methods=['POST', 'GET'])
+def deletar_partida():
     global partidas
-    index_partida = int(request.args.get('index', None))
-    partidas.pop(index_partida)
-    return render_template('index.html', partidas=partidas)
+
+    if request.method == 'POST':
+        index_partida = int(request.form['index'])
+
+        if not index_partida:
+            return render_template('erro.html', mensagem='Não foi possivel deletar partida.')
+
+        partidas.pop(index_partida)
+
+        return render_template('partidas.html', partidas=partidas)
+    
+    return render_template('erro.html', mensagem='Método HTTP invalido.')
 
 
 if __name__ == '__main__':

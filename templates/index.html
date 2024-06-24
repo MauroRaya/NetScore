@@ -1,33 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Scraper - CopaBranqs</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block body %}
+
     <h1>Buscar partidas da <a href="https://www.branqs.com.br/copaBranqs/copaBranqs.html">CopaBranqs<a></h1>
 
-    <form method="POST">
+    <form method="POST" action="/raspar">
+
         <label for="ano_copa">Digite o ano da copa das partidas que deseja buscar</label>
-        <input type="text" id="ano_copa" name="ano_copa" placeholder="2001-2015" maxlength="4">
+        <input autocomplete="off" autofocus type="text" id="ano_copa" name="ano_copa" placeholder="2001-2015" maxlength="4">
         <button type="submit" class="btn-buscar">Buscar</button>
+        
     </form>
 
-    {% if partidas %}
-        <h2>Partidas Encontradas:</h2>
-            <ul>
-                {% for partida in partidas %}
-                    <li>
-                        <button onclick="editarPartida(this)" class="btn-editar"> <img src="./static/img_editar.png" alt="editar partida" class="img-editar"> </button>
-                        <button onclick="removerPartida(this)" class="btn-remover"> <img src="./static/img_remover.png" alt="remover partida" class="img-remover"> </button>
-                        <span>{{ partida.nomeTimeA }} {{ partida.pontosTimeA }} x {{ partida.pontosTimeB }} {{ partida.nomeTimeB }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-    {% endif %}
-
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
-</body>
-</html>
+{% endblock %}
