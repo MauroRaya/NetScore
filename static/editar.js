@@ -1,20 +1,21 @@
-async function editarPartida(elemento) {
-    let span      = elemento.parentElement.querySelector('span');
-    let texto     = span.textContent; 
-    let novoTexto = prompt('Editar partida: ', texto);
-
+async function editarPartida(index, event) {
+    event.preventDefault();
+    
+    let novoTexto = prompt('Editar partida:');
+    
     if (novoTexto !== null && novoTexto.trim() !== "") {
-        let listaNaoOrdenada = elemento.closest('ul');
-        let liElement        = elemento.closest('li');
-        let indexPartida     = Array.from(listaNaoOrdenada.children).indexOf(liElement);
-
-        try {
-            fetch(`/partidas/?index=${indexPartida}&texto=${novoTexto}`, {
-                method: 'PATCH'
-            });
-        }
-        catch (erro) {
-            console.log('Erro. ' + erro);
-        }
+        fetch('/editar', {
+            method: 'POST',
+            body: new URLSearchParams({
+                index: index,
+                texto: novoTexto
+            })
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Erro ao editar a partida.');
+            }
+        });
     }
 }

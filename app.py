@@ -1,22 +1,19 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from raspagem import buscar_partidas
-
+import re
 
 app = Flask(__name__)
 
 COPA_ANO_INICIO = 2001
 COPA_ANO_FIM = 2015
-
-partidas = []
+PARTIDAS = []
 
 
 def validar_ano(_ano_copa):
     try:
         _ano_copa = int(_ano_copa)
-
     except ValueError:
         return False
-    
     except Exception:
         return False
     
@@ -26,60 +23,100 @@ def validar_ano(_ano_copa):
     return True
 
 
+def converter_texto_para_partida(texto):
+    padrao = re.compile(r'([^\W_]+(?:[\s-][^\W_]+)*)\s*(\d+)\s*x\s*(\d+)\s*([^\W_]+(?:[\s-][^\W_]+)*)')
+    partida = padrao.search(texto)
+
+    if not partida:
+        return None
+
+    resultado = {
+        'nomeTimeA':   partida.group(1),
+        'pontosTimeA': partida.group(2),
+        'pontosTimeB': partida.group(3),
+        'nomeTimeB':   partida.group(4)
+    }
+
+    return resultado
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
-@app.route('/partidas', methods=['POST'])
+@app.route('/raspar', methods=['POST'])
 def raspar():
-    global partidas
+    global PARTIDAS
+
+    if request.method != 'POST':
+        return render_template('index.html')
+    
     ano_copa = request.form.get("ano_copa", None)
     
     if not validar_ano(ano_copa):
         return render_template('erro.html', mensagem='Número do ano da copa invalido.')
         
-    partidas = buscar_partidas(ano_copa)
+    PARTIDAS = buscar_partidas(ano_copa)
 
-    return render_template('partidas.html', partidas=partidas)
-
-
-@app.route('/partidas', methods=['PATCH', 'GET'])
-def editar_partidas():
-    global partidas
-
-    if request.method == 'PATCH':
-        index_partida = int(request.args.get('index', None))
-        novo_texto    = request.args.get('texto', None)
-
-        if not index_partida:
-            return render_template('erro.html', mensagem='Não foi possivel editar partida.')
-        
-        if not novo_texto:
-            return render_template('erro.html', mensagem='Texto da nova partida invalido.')
-        
-        partidas[index_partida] = novo_texto
-
-        return render_template('partidas.html', partidas=partidas)
+    return redirect('/partidas') 
     
-    return render_template('erro.html', mensagem='Método HTTP invalido.')
+
+@app.route('/partidas', methods=['GET'])
+def partidas():
+    return render_template('partidas.html', partidas=PARTIDAS)
 
 
-@app.route('/partidas', methods=['POST', 'GET'])
-def deletar_partida():
-    global partidas
+@app.route('/editar', methods=['POST'])
+def editar():
+    global PARTIDAS
 
-    if request.method == 'POST':
-        index_partida = int(request.form['index'])
+    if request.method != 'POST':
+        return redirect('/partidas')
 
-        if not index_partida:
-            return render_template('erro.html', mensagem='Não foi possivel deletar partida.')
+    index_partida = request.form.get('index', None)
+    novo_texto = request.form.get('texto', None)
 
-        partidas.pop(index_partida)
-
-        return render_template('partidas.html', partidas=partidas)
+    if index_partida is None or novo_texto is None:
+        return render_template('erro.html', mensagem='Não foi possivel editar partida.')
     
-    return render_template('erro.html', mensagem='Método HTTP invalido.')
+    try:
+        index_partida = int(index_partida)
+    except ValueError:
+        return render_template('erro.html', mensagem='Índice de partida inválido.')
+
+    nova_partida = converter_texto_para_partida(novo_texto)
+
+    if nova_partida is None:
+        return render_template('erro.html', mensagem='Formato de partida inválido.')
+
+    try:
+        PARTIDAS[index_partida] = nova_partida
+    except IndexError:
+        return render_template('erro.html', mensagem='Índice de partida inválido.')
+
+    return redirect('/partidas')
+
+
+@app.route('/deletar', methods=['POST'])
+def deletar():
+    global PARTIDAS
+
+    if request.method != 'POST':
+        return redirect('/partidas')
+
+    index_partida = request.form.get('index', None)
+
+    if index_partida is None:
+        return render_template('erro.html', mensagem='Não foi possivel deletar partida.')
+    
+    try:
+        index_partida = int(index_partida)
+        PARTIDAS.pop(index_partida)
+    except IndexError:
+        return render_template('erro.html', mensagem='Índice de partida inválido.')
+
+    return redirect('/partidas')
 
 
 if __name__ == '__main__':
