@@ -48,7 +48,7 @@ Funcionalidades
 
 ## Licença
 
-Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
+Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](https://github.com/MauroRaya/NetScore/blob/main/MIT-LICENSE.txt) para mais detalhes.
 
 ---
 
