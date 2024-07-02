@@ -22,13 +22,9 @@ Funcionalidades
   ```bash
   git clone https://github.com/SeuUsuario/NetScore.git
   ```
-2. Navegue até o diretório do projeto:
-  ```bash
-  cd NetScore
-  ```
-3. Abra o projeto no Visual Studio.
-4. Instale as dependencias.
-5. Execute o comando
+2. Abra o projeto no Visual Studio.
+3. Instale as dependencias.
+4. Execute o comando
   ```bash
   flask run
   ```
