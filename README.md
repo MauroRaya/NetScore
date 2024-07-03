@@ -24,7 +24,7 @@ Funcionalidades
   ```
 2. Abra o projeto no Visual Studio.
 3. Instale as dependências.
-4. Execute o comando
+4. Execute o comando:
   ```bash
   flask run
   ```
@@ -52,4 +52,4 @@ Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](https:
 
 ---
 
-*Obrigado por utilizar o NetScore! Para quaisquer dúvidas ou sugestões, sinta-se à vontade para entrar em contato. Esperamos que a aplicação facilite a coleta de dados e análise dos resultados dos jogos de futebol.*
+*Obrigado por utilizar o meu sistema! Para quaisquer dúvidas ou sugestões, sinta-se à vontade para entrar em contato, e espero que ele atenda suas necessidades e facilite a coleta de dados e análise dos resultados das partidas.*
