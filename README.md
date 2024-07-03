@@ -23,7 +23,10 @@ Funcionalidades
   git clone https://github.com/SeuUsuario/NetScore.git
   ```
 2. Abra o projeto no Visual Studio.
-3. Instale as dependências.
+3. Instale as dependências:
+  ```bash
+  pip install -r requirements.txt
+  ```
 4. Execute o comando:
   ```bash
   flask run
