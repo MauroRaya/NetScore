@@ -3,7 +3,7 @@
 Uma aplicação web desenvolvida em Flask para automação de coleta de dados de um site acadêmico de futebol. Utiliza PyAutoGUI, Selenium e BeautifulSoup para obter os resultados de cada jogo da copa escolhida.
 Funcionalidades
 
-- **Coleta Automática de Dados:** Automatiza a navegação e extração de resultados de jogos de futebol de um site acadêmico.  
+- **Coleta Automática de Dados:** Automatiza a navegação e extração de resultados de jogos de futebol de um site acadêmico, formatando os dados para JSON, para facilitar a inserção em bancos de dados.  
 - **Web Scraping:** Utiliza Selenium e BeautifulSoup para capturar e processar os dados.  
 - **Automação de Tarefas:** Implementação de PyAutoGUI para simulação de ações do usuário e interação com elementos web.
 
