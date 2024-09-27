@@ -5,7 +5,9 @@ Funcionalidades
 
 - **Coleta Automática de Dados:** Automatiza a navegação e extração de resultados de jogos de futebol de um site acadêmico.  
 - **Web Scraping:** Utiliza Selenium e BeautifulSoup para capturar e processar os dados.  
-- **Automação de Tarefas:** Implementação de PyAutoGUI para simulação de ações do usuário e interação com elementos web.  
+- **Automação de Tarefas:** Implementação de PyAutoGUI para simulação de ações do usuário e interação com elementos web.
+
+![Interface Principal](https://github.com/MauroRaya/NetScore/blob/main/imgs/imagem_site.png)
 
 ## Requisitos
 
