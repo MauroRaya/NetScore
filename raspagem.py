@@ -14,11 +14,11 @@ def buscar_partidas(_ano_copa):
     partidas = []
 
     elementos = soup.find_all('p') # Pegando todos os elementos HTML com a formatação que PODE ser uma partida
-    padrao = re.compile(r'([^\W_]+(?:[\s-][^\W_]+)*)\s*(\d+)\s*x\s*(\d+)\s*([^\W_]+(?:[\s-][^\W_]+)*)') # Gerando formatação/padrão de uma partida -> (TimeA x TimeB) 
+    padrao = re.compile(r'([^\W_]+(?:[\s-][^\W_]+)*)\s*(\d+)\s*x\s*(\d+)\s*([^\W_]+(?:[\s-][^\W_]+)*)') # Gerando formatação/padrão de uma partida -> (TimeA 0 x 0 TimeB) 
 
     for elemento in elementos:
         texto = elemento.text
-        partida = padrao.search(texto) # Verificando se texto HTML bate o padrão de uma partida (TimeA x TimeB)
+        partida = padrao.search(texto) # Verificando se texto HTML bate o padrão de uma partida
 
         if not partida:
             continue

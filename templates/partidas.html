@@ -11,10 +11,6 @@
                     <form action="/deletar" method="POST" class="partida-form" data-index="{{ loop.index0 }}">
                         <input type="hidden" name="index" value="{{ loop.index0 }}">
 
-                        <button type="button" class="btn-editar" onclick="editarPartida({{ loop.index0 }}, event)">
-                            <img src="./static/img_editar.png" alt="editar partida" class="img-editar"> 
-                        </button>
-
                         <button type="submit" class="btn-remover">
                             <img src="./static/img_remover.png" alt="remover partida" class="img-remover">
                         </button>

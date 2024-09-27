@@ -4,7 +4,7 @@ import re
 
 app = Flask(__name__)
 
-COPA_ANO_INICIO = 2001
+COPA_ANO_INICIO = 2003
 COPA_ANO_FIM    = 2015
 PARTIDAS        = []
 MENSAGEM_ERRO   = ''
